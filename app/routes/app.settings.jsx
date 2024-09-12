@@ -2,13 +2,20 @@ import { BlockStack, Box, Card, InlineGrid, Page, TextField, ColorPicker, Text, 
 import { useState} from 'react';
 import { json } from "@remix-run/node";
 import { useLoaderData, Form } from "@remix-run/react";
+import db from "../db.server"
 
+//settings -> our model (made in prisma > migrations > 2nd folder > migration.sql)
 export async function loader() {
-  const settings = {
-    dataType : "custom string",
-    value : "Deepender wansth"
-  }
-  console.log(json(settings))
+  let settings = db.Settings?.findFirst()
+  try{
+    if(!settings){
+      console.log("No settings found");
+      return json({ error: "No settings found" }, { status: 404 });
+    }
+  
+    console.log("settings =>", settings)
+    
+  }catch(err){console.log(err, "no error found")}
   return json(settings)
 }
 
@@ -138,6 +145,7 @@ export default function AppSettingsLayoutExample() {
                     onChange={setColor}
                     type="text"
                     autoComplete="off"
+                    name="heading color"
                   />
                   </LegacyCard>
                 </Grid.Cell>
@@ -185,7 +193,7 @@ export default function AppSettingsLayoutExample() {
               <Grid>
                 <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 3, lg: 6, xl: 6}}>
                   <LegacyCard sectioned>
-                    <ColorPicker onChange={setSliderColor} color={sliderColor} />
+                    <ColorPicker onChange={setSliderColor} color={sliderColor} name="slider color" />
                   </LegacyCard>
                 </Grid.Cell>
                 <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 3, lg: 6, xl: 6}}>

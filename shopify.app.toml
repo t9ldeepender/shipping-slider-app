@@ -3,7 +3,7 @@
 client_id = "a1b9e8f715d15af647352dacf062b748"
 name = "shipping-delivery"
 handle = "shipping-delivery-2"
-application_url = "https://folder-coin-muscles-cst.trycloudflare.com"
+application_url = "https://horror-runs-bishop-yourself.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://folder-coin-muscles-cst.trycloudflare.com/auth/callback",
-  "https://folder-coin-muscles-cst.trycloudflare.com/auth/shopify/callback",
-  "https://folder-coin-muscles-cst.trycloudflare.com/api/auth/callback"
+  "https://horror-runs-bishop-yourself.trycloudflare.com/auth/callback",
+  "https://horror-runs-bishop-yourself.trycloudflare.com/auth/shopify/callback",
+  "https://horror-runs-bishop-yourself.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
