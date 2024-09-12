@@ -102,7 +102,7 @@ export default function AppSettingsLayoutExample() {
             >
               <BlockStack gap="400">
               <Text as="h3" variant="headingMd">
-                Heading
+                Heading 
               </Text>
               </BlockStack>
             </Box>
