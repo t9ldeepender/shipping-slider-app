@@ -1,4 +1,4 @@
-import { BlockStack, Box, Card, InlineGrid, Page, TextField, ColorPicker, Text, Grid, LegacyCard, Button } from "@shopify/polaris";
+import { BlockStack, Box, Card, InlineGrid, Page, TextField, ColorPicker, Text, Grid, LegacyCard, Button} from "@shopify/polaris";
 import { useState} from 'react';
 import { json } from "@remix-run/node";
 import { useLoaderData, Form } from "@remix-run/react";
@@ -6,22 +6,50 @@ import db from "../db.server"
 
 //settings -> our model (made in prisma > migrations > 2nd folder > migration.sql)
 export async function loader() {
-  let settings = db.Settings?.findFirst()
-  try{
-    if(!settings){
-      console.log("No settings found");
-      return json({ error: "No settings found" }, { status: 404 });
-    }
-  
-    console.log("settings =>", settings)
+  let settings = db.settings.findFirst()
+
+  // if(!db){
+  //   return false
+  // }else{
+  //   settings = db.settings.findFirst()
+  //   try{
+  //     if(!settings){
+  //       console.log("No settings found");
+  //       return json({ error: "No settings found" }, { status: 404 });
+  //     }
     
-  }catch(err){console.log(err, "no error found")}
+  //     console.log("settings =>", settings)
+      
+  //   }catch(err){console.log(err, "no error found")}
+  // }
   return json(settings)
 }
+
 
 export async function action({ request }){
   let settings = await request.formData()
   settings = Object.fromEntries(settings)
+  console.log("******",settings)
+  await db.settings.upsert({
+    where: {
+      id : "1"
+    },
+    update: {
+      heading: settings.heading,
+      headingColor: settings.heading_color,
+      amount: parseInt(settings.amount),
+      sliderColor: settings.slider_color,
+    },
+    create: {
+      id : settings.id,
+      heading: settings.heading,
+      headingColor: settings.heading_color,
+      amount: parseInt(settings.amount),
+      sliderColor: settings.slider_color,
+      shop: Math.random().toString()
+    },
+  })
+
   return json({message : settings})
 }
 
@@ -41,7 +69,8 @@ export default function AppSettingsLayoutExample() {
     });
     const [title, setTitle] = useState(settings)
 
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState(0);
+
 
     const handleChange = (newValue) => {
       if (/^\d*$/.test(newValue)) {
@@ -99,6 +128,8 @@ export default function AppSettingsLayoutExample() {
           },
         ]}
       >
+
+      
         <Form method="POST">
         <BlockStack gap={{ xs: "800", sm: "400" }}>
           <InlineGrid columns={{ xs: "1fr", md: "2fr 5fr" }} gap="400">
@@ -111,6 +142,7 @@ export default function AppSettingsLayoutExample() {
               <Text as="h3" variant="headingMd">
                 Heading 
               </Text>
+              <TextField disabled label="ID" name="id" value={Math.random()} onChange={()=>Math.random()} />
               </BlockStack>
             </Box>
             <Card roundedAbove="sm">
@@ -134,7 +166,7 @@ export default function AppSettingsLayoutExample() {
               <Grid>
                 <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 3, lg: 6, xl: 6}}>
                   <LegacyCard sectioned>
-                    <ColorPicker onChange={setColor} color={color} name="heading color" />
+                    <ColorPicker onChange={setColor} color={color} name="heading_color" />
                   </LegacyCard>
                 </Grid.Cell>
                 <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 3, lg: 6, xl: 6}}>
@@ -145,7 +177,7 @@ export default function AppSettingsLayoutExample() {
                     onChange={setColor}
                     type="text"
                     autoComplete="off"
-                    name="heading color"
+                    name="heading_color"
                   />
                   </LegacyCard>
                 </Grid.Cell>
@@ -168,7 +200,7 @@ export default function AppSettingsLayoutExample() {
               <BlockStack>
               <TextField
                 label="Customer get free shipping on"
-                value={value}
+                value={parseInt(value)}
                 onChange={handleChange}
                 type="number"
                 autoComplete="off"
@@ -193,7 +225,7 @@ export default function AppSettingsLayoutExample() {
               <Grid>
                 <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 3, lg: 6, xl: 6}}>
                   <LegacyCard sectioned>
-                    <ColorPicker onChange={setSliderColor} color={sliderColor} name="slider color" />
+                    <ColorPicker onChange={setSliderColor} color={sliderColor} name="slider_color" />
                   </LegacyCard>
                 </Grid.Cell>
                 <Grid.Cell columnSpan={{xs: 6, sm: 3, md: 3, lg: 6, xl: 6}}>
@@ -204,7 +236,7 @@ export default function AppSettingsLayoutExample() {
                     onChange={setSliderColor}
                     type="text"
                     autoComplete="off"
-                    name="slider color"
+                    name="slider_color"
                   />
                   </LegacyCard>
                 </Grid.Cell>

@@ -34,7 +34,11 @@ model Session {
 // ? for not required
 
 model Settings {
-  id            String    @id
-  shop          String
+  id            String    @id @default(cuid())  // or uuid()
+  heading       String?
+  headingColor  String?
   amount        Int
+  sliderColor   String?
+  shop          String
 }
+
