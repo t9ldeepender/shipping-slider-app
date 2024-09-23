@@ -3,7 +3,7 @@
 client_id = "a1b9e8f715d15af647352dacf062b748"
 name = "shipping-delivery"
 handle = "shipping-delivery-2"
-application_url = "https://periods-family-happy-aware.trycloudflare.com"
+application_url = "https://locator-bill-bruce-military.trycloudflare.com"
 embedded = true
 
 [build]
@@ -13,21 +13,17 @@ include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products"
+scopes = "read_cart_transforms,read_orders,read_products,write_products"
 
 [auth]
 redirect_urls = [
-  "https://periods-family-happy-aware.trycloudflare.com/auth/callback",
-  "https://periods-family-happy-aware.trycloudflare.com/auth/shopify/callback",
-  "https://periods-family-happy-aware.trycloudflare.com/api/auth/callback"
+  "https://locator-bill-bruce-military.trycloudflare.com/auth/callback",
+  "https://locator-bill-bruce-military.trycloudflare.com/auth/shopify/callback",
+  "https://locator-bill-bruce-military.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
 api_version = "2024-07"
-
-  [[webhooks.subscriptions]]
-  topics = [ "app/uninstalled" ]
-  uri = "/webhooks"
 
 [pos]
 embedded = false
