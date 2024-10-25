@@ -3,7 +3,7 @@
 client_id = "a1b9e8f715d15af647352dacf062b748"
 name = "shipping-delivery"
 handle = "shipping-delivery-2"
-application_url = "https://locator-bill-bruce-military.trycloudflare.com"
+application_url = "https://matters-massachusetts-weekends-castle.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_cart_transforms,read_orders,read_products,write_products"
 
 [auth]
 redirect_urls = [
-  "https://locator-bill-bruce-military.trycloudflare.com/auth/callback",
-  "https://locator-bill-bruce-military.trycloudflare.com/auth/shopify/callback",
-  "https://locator-bill-bruce-military.trycloudflare.com/api/auth/callback"
+  "https://matters-massachusetts-weekends-castle.trycloudflare.com/auth/callback",
+  "https://matters-massachusetts-weekends-castle.trycloudflare.com/auth/shopify/callback",
+  "https://matters-massachusetts-weekends-castle.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

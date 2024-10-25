@@ -1,47 +1,92 @@
-import { json } from "@remix-run/node"; // or "@remix-run/cloudflare" if using Cloudflare
-import { useLoaderData } from "@remix-run/react";
-import { authenticate } from "../shopify.server";
+import { json, redirect } from "@remix-run/node"; 
+import { useLoaderData, useNavigate } from "@remix-run/react";
+import { useEffect } from "react";
+import { getCode } from "./app._index";
+
+export function IframeHandler({ shop, host }) {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+
+    if (window.self !== window.top) {
+      const exitIframeUrl = `/auth/exit-iframe?shop=${shop}&host=${host}`;
+      window.top.location.href = exitIframeUrl;
+    }
+  }, [shop, host]);
+
+  return null;
+}
+
+
+async function getShopifyAccessToken() {
+  const accessToken = process.env.SHOPIFY_ACCESS_TOKEN;
+  if (!accessToken) {
+    throw new Error("Missing Shopify access token");
+  }
+  return accessToken;
+}
+
 
 export const loader = async ({ request }) => {
-  await authenticate.admin(request);
 
-  const shop = "shipping-delivery-22.myshopify.com";
-  const accessToken = "19b552a4-97d5-4cc3-89e5-1b608e775a47";
+  // try {
+  //   const response = await fetch(`https://${shop}/admin/oauth/access_token`, {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       client_id: process.env.SHOPIFY_API_KEY,
+  //       client_secret: process.env.SHOPIFY_API_SECRET,
+  //       code,
+  //     }),
+  //   });
 
-  try {
-    const response = await fetch(`https://${shop}/admin/api/2023-07/carts.json`, {
-      method: "GET",
-      headers: {
-        "X-Shopify-Access-Token": accessToken,
-        "Content-Type": "application/json",
-      },
-    });
+  //   if (!response.ok) {
+  //     throw new Error(`Error exchanging code: ${response.statusText}`);
+  //   }
 
-    if (!response.ok) {
-      const errorMessage = await response.text(); // capture the error response
-      console.error(`Failed to fetch data. Status: ${response.status}. Message: ${errorMessage}`);
-      throw new Response("Failed to fetch store data", { status: 500 });
-    }
+  //   const data = await response.json();
+  //   const accessToken = data.access_token;
 
-    const storeData = await response.json();
-    console.log("Store Data:", storeData); // Log the retrieved data for debugging
+  //   console.log("Access Token:", accessToken);
 
-    return json(storeData);
-  } catch (error) {
-    console.error("Error fetching data:", error); // Log the error details
-    throw new Response("Failed to fetch store data", { status: 500 });
-  }
+
+  //   return json({ accessToken, shop });
+  // } catch (error) {
+  //   console.error("Token exchange failed:", error);
+  //   return json({ error: "Failed to exchange token" }, { status: 500 });
+  // }
+
 };
 
 
-export default function StoreData() {
-  const storeData = useLoaderData();
+export const action = async ({ request }) => {
+
+  const body = await request.json();
+
+  console.log("Cart updated:", body);
+
+  return json({ success: true });
+};
+
+export function CartData() {
+  const cart = useLoaderData();
+
+  if (!cart) {
+    return <div>No cart found</div>;
+  }
 
   return (
     <div>
-      <h1>Store Information</h1>
-      <p>Store Name: {storeData?.shop?.name}</p>
-      <p>Store Email: {storeData?.shop?.email}</p>
+      <h1>Cart Information</h1>
+      {getCode}
+      {/* <ul>
+        {cart.items.map((item) => (
+          <li key={item.id}>
+            Product: {item.product_title} <br />
+            Quantity: {item.quantity}
+          </li>
+        ))}
+      </ul> */}
     </div>
   );
 }

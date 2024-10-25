@@ -20,24 +20,41 @@ const shopify = shopifyApp({
   sessionStorage: new PrismaSessionStorage(prisma),
   distribution: AppDistribution.AppStore,
   restResources,
+  
+  // Add webhooks for carts
   webhooks: {
-    PRODUCTS_UPDATE: {
+    CARTS_CREATE: {
       deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks",
+      callbackUrl: "/webhooks/carts/create",
       callback: async (topic, shop, body, webhookId) => {
-        console.log('--- Cart update ---');
+        console.log('--- Cart Created ---');
         const payload = JSON.parse(body);
         console.log(payload);
-        console.log('--- /Cart update ---');
-      }
-    }
-  },
-  hooks: {
-    afterAuth: async ({ session }) => {
-      shopify.registerWebhooks({ session });
-      console.log("Auth happened");
+        console.log('--- /Cart Created ---');
+        // You can handle cart creation logic here (e.g., store it, notify, etc.)
+      },
+    },
+    CARTS_UPDATE: {
+      deliveryMethod: DeliveryMethod.Http,
+      callbackUrl: "/webhooks/carts/update",
+      callback: async (topic, shop, body, webhookId) => {
+        console.log('--- Cart Updated ---');
+        const payload = JSON.parse(body);
+        console.log(payload);
+        console.log('--- /Cart Updated ---');
+        // Handle cart update logic here (e.g., notify app, fetch latest cart data)
+      },
     },
   },
+  
+  hooks: {
+    afterAuth: async ({ session }) => {
+      // Register both cart webhooks after authentication
+      await shopify.registerWebhooks({ session });
+      console.log("Auth happened, webhooks registered.");
+    },
+  },
+
   ...(process.env.SHOP_CUSTOM_DOMAIN
     ? { customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN] }
     : {}),

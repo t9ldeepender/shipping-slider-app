@@ -6,7 +6,7 @@ export const action = async ({ request }) => {
 
   switch (topic) {
     case "CART_UPDATE":
-      console.log("CART/create: ", payload);
+      console.log("*****, CART/create: ", payload);
       break;
     case "APP_UNINSTALLED":
       if (session) {

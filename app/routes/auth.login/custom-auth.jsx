@@ -1,8 +1,6 @@
 import { redirect } from "@remix-run/node";
-import { authenticate } from "../shopify.server";
 
 export const loader = async ({ request }) => {
-  await authenticate.admin(request);
   const shop = new URL(request.url).searchParams.get("shop");
 
   if (!shop) {
@@ -17,5 +15,7 @@ export const loader = async ({ request }) => {
 
   // Redirect to Shopify's app authorization page
   return redirect(installUrl);
-
 };
+
+
+// https://shipping-delivery-22.myshopify.com.myshopify.com/admin/oauth/authorize?client_id=a1b9e8f715d15af647352dacf062b748&scope=read_cart_transforms&redirect_uri=https://shipping-delivery-22.myshopify.com/auth/callback

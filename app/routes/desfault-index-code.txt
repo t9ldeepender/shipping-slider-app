@@ -1,0 +1,40 @@
+ // code setup start
+  const url = new URL(request.url);
+
+
+  const shop = url.searchParams.get("shop");
+  const code = url.searchParams.get("code");
+
+  console.log("Shop:", shop);
+  console.log("Code:", code);
+
+  if (!shop || !code) {
+    console.log("Missing shop or code, redirecting to OAuth...");
+
+    const client_id = process.env.SHOPIFY_API_KEY;
+    const redirect_uri = "https://engaged-glance-cv-proportion.trycloudflare.com/auth/callback";
+    const scope = "read_cart_transforms";
+
+    const authUrl = `https://${shop || 'shipping-delivery-22.myshopify.com'}/admin/oauth/authorize?client_id=${client_id}&scope=${scope}&redirect_uri=${redirect_uri}`;
+
+    console.log("Redirecting to Auth URL:", authUrl);
+
+    return redirect(authUrl);
+  }
+
+  console.log("Received shop and code. Proceeding with token exchange...");
+  // code setup end
+
+   // useEffect(() => {
+  //   // Redirect to the app's settings page using Shopify App Bridge if token exists
+  //   if (tempToken) {
+  //     const redirectToAppSettings = () => {
+  //       const redirect = Redirect.create(app);
+  //       redirect.dispatch(
+  //         Redirect.Action.APP, // Redirect within the app
+  //         "/apps/shipping-delivery-2/app/settings" // Update this path based on your app
+  //       );
+  //     };
+  //     redirectToAppSettings();
+  //   }
+  // }, [tempToken, app]);
