@@ -1,18 +1,24 @@
-import {Page, Grid, LegacyCard, Button, MediaCard } from '@shopify/polaris';
-import React from 'react';
-import "./component.css"
+import { Page, MediaCard } from '@shopify/polaris';
+import "./component.css";
+import { useNavigate } from '@remix-run/react';
 
-export function GridWithMedia({heading="",content="", button=false, route="/"}) {
+export const GridWithMedia = ({ heading = "", content = "", button = false, action = null }) => {
+  const navigate = useNavigate();
+  
+  const GotoSettings = () => {
+    alert("Button Clicked");
+  };
+  
   return (
     <Page fullWidth>
-       <MediaCard
+      <MediaCard
         title={heading}
         primaryAction={{
           content: 'Click To Set',
-          onAction: () => {},
+          onAction: GotoSettings, // Pass the function without invoking it
         }}
         description={content}
-        popoverActions={[{content: 'Dismiss', onAction: () => {}}]}
+        popoverActions={[{ content: 'Dismiss', onAction: () => { alert("toggle"); } }]}
       >
         <img
           alt=""
@@ -27,9 +33,10 @@ export function GridWithMedia({heading="",content="", button=false, route="/"}) 
       </MediaCard>
     </Page>
   );
-}
+};
 
-function MediaCardExample() {
+
+export function MediaCardExample() {
     return (
       <MediaCard
         title="Getting Started"

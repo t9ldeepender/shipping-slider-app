@@ -4,6 +4,7 @@ import { RemixServer } from "@remix-run/react";
 import { createReadableStreamFromReadable } from "@remix-run/node";
 import { isbot } from "isbot";
 import { addDocumentResponseHeaders } from "./shopify.server";
+import config from "./config";
 
 const ABORT_DELAY = 5000;
 
@@ -13,6 +14,11 @@ export default async function handleRequest(
   responseHeaders,
   remixContext,
 ) {
+    // Access values directly from the config
+    const redirectUrl = config.redirectUrl;
+     // Alternatively, if you want to set them globally (optional)
+  process.env.REDIRECT_URLS = redirectUrl;
+
   addDocumentResponseHeaders(request, responseHeaders);
   const userAgent = request.headers.get("user-agent");
   const callbackName = isbot(userAgent ?? "") ? "onAllReady" : "onShellReady";

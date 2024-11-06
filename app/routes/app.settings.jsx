@@ -1,54 +1,33 @@
 import { BlockStack, Box, Card, InlineGrid, Page, TextField, ColorPicker, Text, Grid, LegacyCard, Button} from "@shopify/polaris";
-import { useEffect, useState} from 'react';
-import { json, redirect } from "@remix-run/node";
+import {useState} from 'react';
+import { json } from "@remix-run/node";
 import { useLoaderData, Form } from "@remix-run/react";
 import db from "../db.server"
-import { getSession } from "../utils/session";
-import { useAppBridge } from "@shopify/app-bridge-react";
 
 //settings -> our model (made in prisma > migrations > 2nd folder > migration.sql)
 export async function loader({request}) {
 
-  const url = new URL(request.url);
-  const shop = url.searchParams.get("shop");
-
-  const session = await getSession(request);
-  const token = session.get("accessToken");
-
-  if (!token) {
-    const client_id = process.env.SHOPIFY_API_KEY;
-    const redirect_uri = "https://encourages-silly-gray-privacy.trycloudflare.com/auth/callback";
-    const scope = "read_products";
-
-    const randomState = generateRandomString();
-    const auth_url = `https://${shop}/admin/oauth/authorize?client_id=${client_id}&scope=${scope}&redirect_uri=${redirect_uri}&state=${randomState}`;
-
-    console.log("Redirecting to Shopify OAuth:", auth_url);
-    return redirect(auth_url);
-  }
+  
 
   let settings = db.settings.findFirst()
 
-  // if(!db){
-  //   return false
-  // }else{
-  //   settings = db.settings.findFirst()
-  //   try{
-  //     if(!settings){
-  //       console.log("No settings found");
-  //       return json({ error: "No settings found" }, { status: 404 });
-  //     }
+  if(!db){
+    return false
+  }else{
+    settings = db.settings.findFirst()
+    try{
+      if(!settings){
+        console.log("No settings found");
+        return json({ error: "No settings found" }, { status: 404 });
+      }
     
-  //     console.log("settings =>", settings)
+      console.log("settings =>", settings)
       
-  //   }catch(err){console.log(err, "no error found")}
-  // }
+    }catch(err){console.log(err, "no error found")}
+  }
   return json(settings)
 }
 
-function generateRandomString() {
-  return Math.random().toString(36).substring(7);  // Basic random string generator
-}
 
 
 export async function action({ request }){
@@ -97,19 +76,6 @@ export default function AppSettingsLayoutExample() {
 
     const [value, setValue] = useState(0);
 
-    // token store at local storage
-const loaderData = useLoaderData();
-const app = useAppBridge(); // Initialize App Bridge instance
-const [tempToken, setTempToken] = useState(null);
-useEffect(() => {
-  // If token exists in the loader data, save it to local storage and state
-  if (loaderData?.token) {
-    setTempToken(loaderData.token);
-    localStorage.setItem("auth_token", loaderData.token);
-  } else {
-    console.error("No token found in loaderData.");
-  }
-}, [loaderData]);
 
 
     const handleChange = (newValue) => {

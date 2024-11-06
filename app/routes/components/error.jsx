@@ -2,7 +2,7 @@ import React from 'react';
 import {Bleed, Card, Text, InlineStack} from '@shopify/polaris';
 
 
-export function ErrorComponent(errMessage) {
+export const ErrorComponent = (errMessage) => {
   return (
     <Card>
       <Text as="h2" variant="bodyMd">
@@ -15,7 +15,7 @@ export function ErrorComponent(errMessage) {
   );
 }
 
-const Placeholder = ({label = '', height = 'auto', width = 'auto'}) => {
+export const Placeholder = ({label = '', height = 'auto', width = 'auto'}) => {
   return (
     <div
       style={{

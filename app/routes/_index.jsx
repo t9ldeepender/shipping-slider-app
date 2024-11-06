@@ -2,10 +2,11 @@ import { useEffect } from "react";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import { Frame, MediaCard, Page } from "@shopify/polaris";
 import { ErrorComponent } from "./components/error";
-import { loader as authLoader } from "./Authloader";
 
-// Export the loader for server-side use in Remix
-export { authLoader as loader };
+export const loader = ({ request }) => {
+  return { token: null, redirect_url: null };
+};
+
 
 export const getToken = (token) => {
     return token
@@ -13,12 +14,13 @@ export const getToken = (token) => {
 
 export default function Index() {
   const navigate = useNavigate();
-  const { token, redirect_url } = useLoaderData();
+  const { token, redirect_url } = useLoaderData() || {};
+
   // const [toast, setToast] = useState(false);
 
   useEffect(() => {
     if (token) {
-      localStorage.setItem("auth_token", token);
+      localStorage.getItem("auth_token", token);
       getToken(token)
     }
   }, [token]);

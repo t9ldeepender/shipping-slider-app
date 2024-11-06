@@ -1,4 +1,4 @@
-import { createCookieSessionStorage, redirect } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { getSession } from "../utils/session";
 
 // Loader function for handling Shopify OAuth callback
@@ -40,7 +40,7 @@ export const loader = async ({ request }) => {
   session.set("accessToken", accessToken);
   // Store the access token or pass it to your app in some way
   // Redirect to your app's page inside the Shopify admin
-  const appUrl = `https://${shop}/admin/apps/shipping-delivery-2/?token=${accessToken}`;
+  const appUrl = `https://${shop}/admin/apps/shipping-delivery-2?token=${accessToken}`;
 
   return redirect(appUrl);
 };
