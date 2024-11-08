@@ -7,13 +7,14 @@ import { loader as authLoader } from "./Authloader";
 // Export the loader for server-side use in Remix
 export { authLoader as loader };
 
+// help in setting the token in local storage
 export const getToken = (token) => {
     return token
 }
 
 export default function Index() {
   const navigate = useNavigate();
-  const { token, redirect_url } = useLoaderData();
+  const { token } = useLoaderData();
   // const [toast, setToast] = useState(false);
 
   useEffect(() => {
@@ -41,7 +42,7 @@ export default function Index() {
                   showToast();
                 },
               }}
-              description={`Let set your app settings, Redirect URL - ${redirect_url}`}
+              description={`Let set your app settings`}
               popoverActions={[
                 {
                   content: "Dismiss",

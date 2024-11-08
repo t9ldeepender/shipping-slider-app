@@ -1,16 +1,16 @@
-import { BlockStack, Box, Card, InlineGrid, Page, TextField, ColorPicker, Text, Grid, LegacyCard, Button} from "@shopify/polaris";
-import {useState} from 'react';
+import { BlockStack, Box, Card, InlineGrid, Page, TextField, ColorPicker, Text, Grid, LegacyCard, Button, Toast} from "@shopify/polaris";
+import {useCallback, useState} from 'react';
 import { json } from "@remix-run/node";
 import { useLoaderData, Form } from "@remix-run/react";
 import db from "../db.server"
+import { authenticate } from "../shopify.server";
 
 //settings -> our model (made in prisma > migrations > 2nd folder > migration.sql)
 export async function loader({request}) {
-
+  const session = await authenticate.admin(request);
+  const authToken = session.session.accessToken;
   
-
   let settings = db.settings.findFirst()
-
   if(!db){
     return false
   }else{
@@ -75,6 +75,7 @@ export default function AppSettingsLayoutExample() {
     const [title, setTitle] = useState(settings)
 
     const [value, setValue] = useState(0);
+    // const [toast, setToast] = useState(false);
 
 
 
@@ -120,12 +121,23 @@ export default function AppSettingsLayoutExample() {
       return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
 
     }// convert to hex color end
+
+    // const toggleActive = useCallback(() => setToast((toast) => !toast), []);
+    // const submitPopup = toast ? (
+    //   <Toast content="Form Submitted" onDismiss={toggleActive} />
+    // ) : null;
+
+    const submitPopup = () => {
+      shopify.toast.show('Product saved', {
+        duration: 5000,
+      });
+    }
     
     return (
       <Page
         divider
         title="App Configurations"
-        primaryAction={{ content: "View on your store", disabled: true }}
+        primaryAction={{ content: "", disabled: true }}
         secondaryActions={[
           {
             content: "Duplicate",
@@ -135,7 +147,7 @@ export default function AppSettingsLayoutExample() {
         ]}
       >
         
-        <Form method="POST">
+        <Form method="POST" onSubmit={submitPopup}>
         <BlockStack gap={{ xs: "800", sm: "400" }}>
           <InlineGrid columns={{ xs: "1fr", md: "2fr 5fr" }} gap="400">
             <Box

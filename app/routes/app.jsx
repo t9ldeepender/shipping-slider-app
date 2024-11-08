@@ -5,25 +5,34 @@ import { AppProvider } from "@shopify/shopify-app-remix/react";
 import { NavMenu } from "@shopify/app-bridge-react";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
 import { authenticate } from "../shopify.server";
+import { useEffect, useState } from "react";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
+  
+  // Retrieve apiKey and host from environment or URL
+  const apiKey = process.env.SHOPIFY_API_KEY || "";
+  const host = new URL(request.url).searchParams.get("host");
 
-  return json({ apiKey: process.env.SHOPIFY_API_KEY || "" });
+  return json({ apiKey, host });
 };
 
 export default function App() {
-  const { apiKey } = useLoaderData();
+  const { apiKey, host } = useLoaderData();
+  // state to store the auth_token
+
+
+  // why to set the token? as without it our code will not work, so in production I will store it in db and for now it would be the best option
 
   return (
-    <AppProvider isEmbeddedApp={true} apiKey={apiKey}>
+    <AppProvider isEmbeddedApp={true} apiKey={apiKey} host={host}>
       <NavMenu>
-        <Link to="/app" rel="home">Home</Link>
-        <Link to="/app/settings" rel="settings">Settings</Link>
-        <Link to="/app/pricing" rel="pricing">Pricing</Link>
-        <Link to="/app/store-data" rel="store_data">Store Data</Link>
+        <Link to={`/app`} rel="home">Home</Link>
+        <Link to={`/app/settings`} rel="settings">Settings</Link>
+        <Link to={`/app/pricing`} rel="pricing">Pricing</Link>
+        <Link to={`/app/store`} rel="store-data">Store Data</Link>
       </NavMenu>
       <Outlet />
     </AppProvider>

@@ -3,7 +3,7 @@
 client_id = "a1b9e8f715d15af647352dacf062b748"
 name = "shipping-delivery"
 handle = "shipping-delivery-2"
-application_url = "https://happening-generator-tmp-rw.trycloudflare.com"
+application_url = "https://pittsburgh-october-cheque-surrounding.trycloudflare.com"
 embedded = true
 
 [build]
@@ -13,13 +13,13 @@ include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_cart_transforms,read_orders,read_products,write_products"
+scopes = "read_cart_transforms,read_orders,read_products,read_themes,write_products"
 
 [auth]
 redirect_urls = [
-  "https://happening-generator-tmp-rw.trycloudflare.com/auth/callback",
-  "https://happening-generator-tmp-rw.trycloudflare.com/auth/shopify/callback",
-  "https://happening-generator-tmp-rw.trycloudflare.com/api/auth/callback"
+  "https://pittsburgh-october-cheque-surrounding.trycloudflare.com/auth/callback",
+  "https://pittsburgh-october-cheque-surrounding.trycloudflare.com/auth/shopify/callback",
+  "https://pittsburgh-october-cheque-surrounding.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
