@@ -1,3 +1,12 @@
 .home_page_width{
     width: 50%;
 }
+
+.insertHtmlButton{
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 800;
+    background-color: #232323;
+    color: #fff;
+}

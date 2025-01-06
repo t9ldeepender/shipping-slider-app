@@ -1,5 +1,5 @@
 import { BlockStack, Box, Card, InlineGrid, Page, TextField, ColorPicker, Text, Grid, LegacyCard, Button, Toast} from "@shopify/polaris";
-import {useCallback, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import { json } from "@remix-run/node";
 import { useLoaderData, Form } from "@remix-run/react";
 import db from "../db.server"
@@ -75,6 +75,7 @@ export default function AppSettingsLayoutExample() {
     const [title, setTitle] = useState(settings)
 
     const [value, setValue] = useState(0);
+    const [id, setId] = useState(Math.random())
     // const [toast, setToast] = useState(false);
 
 
@@ -132,6 +133,10 @@ export default function AppSettingsLayoutExample() {
         duration: 5000,
       });
     }
+
+    useEffect(()=>{
+      setId(Math.random());
+    },[])
     
     return (
       <Page
@@ -159,7 +164,7 @@ export default function AppSettingsLayoutExample() {
               <Text as="h3" variant="headingMd">
                 Heading 
               </Text>
-              <TextField disabled label="ID" name="id" value={Math.random()} onChange={()=>Math.random()} />
+              <TextField disabled label="ID" name="id" value={id} onChange={()=>{}} />
               </BlockStack>
             </Box>
             <Card roundedAbove="sm">

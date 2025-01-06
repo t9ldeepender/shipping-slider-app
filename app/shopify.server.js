@@ -23,28 +23,26 @@ const shopify = shopifyApp({
   
   // Add webhooks for carts
   webhooks: {
-    CARTS_CREATE: {
+    CHECKOUTS_CREATE: {
       deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks/carts/create",
+      callbackUrl: "/webhooks/checkouts/create",
       callback: async (topic, shop, body, webhookId) => {
-        console.log('--- Cart Created ---');
+        console.log('--- Checkout Created ---');
         const payload = JSON.parse(body);
         console.log(payload);
-        console.log('--- /Cart Created ---');
-        // You can handle cart creation logic here (e.g., store it, notify, etc.)
+        console.log('--- /Checkout Created ---');
       },
     },
-    CARTS_UPDATE: {
+    CHECKOUTS_UPDATE: {
       deliveryMethod: DeliveryMethod.Http,
-      callbackUrl: "/webhooks/carts/update",
+      callbackUrl: "/webhooks/checkouts/update",
       callback: async (topic, shop, body, webhookId) => {
-        console.log('--- Cart Updated ---');
+        console.log('--- Checkout Updated ---');
         const payload = JSON.parse(body);
         console.log(payload);
-        console.log('--- /Cart Updated ---');
-        // Handle cart update logic here (e.g., notify app, fetch latest cart data)
+        console.log('--- /Checkout Updated ---');
       },
-    },
+    },   
   },
   
   hooks: {

@@ -1,20 +1,156 @@
-{% assign avg_rating = block.settings.product.metafields.demo.avg_rating.value | round %}
-<span style="color:{{ block.settings.colour }}">
-  {% render 'stars', rating: avg_rating %}
-</span>
-{% if avg_rating >= 4 %}
-  <br>
-  <img src="{{ "thumbs-up.png" | asset_img_url: '15x' }}" height="15" width="15" loading="lazy">
-  {{ 'ratings.home.recommendationText' | t }}
-{% endif %}
+{% comment %} 
+  {% assign avg_rating = block.settings.product.metafields.demo.avg_rating.value | round %}
+  <span style="color:{{ block.settings.colour }}">
+    {% render 'stars', rating: avg_rating %}
+  </span>
+  {% if avg_rating >= 4 %}
+    <br>
+    <img src="{{ "thumbs-up.png" | asset_img_url: '15x' }}" height="15" width="15" loading="lazy">
+    {{ 'ratings.home.recommendationText' | t }}
+  {% endif %}
+{% endcomment %}
+
+<style>
+/* .slider-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+} */
+
+.progress {
+  background: rgba(0, 0, 0, 0.78);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  justify-content: flex-start;
+  border-radius: 100px;
+  align-items: center;
+  position: relative;
+  padding: 2px 3px;
+  display: flex;
+  height: 25px;
+  width: 90%;
+  position: relative;
+  margin: 15px auto;
+}
+
+.progress-value {
+  animation: load 3s normal forwards;
+  box-shadow: 0 10px 40px -10px #fff;
+  border-radius: 100px;
+  background: url("https://cdn.shopify.com/s/files/1/0724/0479/5628/files/2I3c.gif?v=1735819548");
+  height: 95%;
+  width: 0;
+  display: block !important;
+}
+
+.slider-wrapper h3 {
+    text-align:center;
+    font-weight: 100;
+    padding: 10px;
+    font-size: 20px;
+    color: #6b6969;
+    margin: 0;
+}
+
+@keyframes load {
+  0% { width: 0; }
+  100% { width: 68%; }
+}
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+  // Select the cart container
+
+  function regenerateSlider(contentFunction) {
+
+    const cartContainer = Array.from(
+      document.querySelectorAll(
+        "[class*='cart'], [id*='cart'], [data-cart], [id*='CartDrawer'], [class*='popup-cart'], [id*='CartContainer']"
+      )
+      ).find(
+        (el) =>
+          !["style", "script", "link"].includes(el.tagName.toLowerCase()) &&
+          el.querySelector(".slider-wrapper") !== null // Avoid containers already containing slider-wrapper
+      );
+
+    const sliderHTML = `
+      <div class="slider-wrapper">
+        ${contentFunction()}
+      </div>
+    `;
+
+    const selectedElement = "{{ block.settings.target_container }}";
+    const analyseContainer = selectedElement
+      ? document.querySelector(selectedElement)
+      : cartContainer;
+
+    if (analyseContainer) {
+
+      // Check if slider-wrapper already exists
+      const sliderExists = analyseContainer.querySelector(".slider-wrapper");
+      if (sliderExists) {
+      } else {
+        analyseContainer.insertAdjacentHTML("afterbegin", sliderHTML);
+      }
+    } else {
+    }
+
+  }
+
+  function progressSlider(){
+    return `
+        <div class="progress">
+          <div class="progress-value"></div>
+        </div>
+    `;
+  }
+
+  function emptyContent(){
+    return `
+        <h3>{{ section.settings.empty_cart_content }}</h3>
+    `;
+  }
+  
+
+  function cartUpdate() {
+    fetch("/cart.json") // Ensure the correct relative path
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json(); // Parse the JSON response
+      })
+      .then((cart) => {
+        if(cart.item_count > 0){
+            regenerateSlider(progressSlider)
+          }else{
+            regenerateSlider(emptyContent)
+        }
+         
+      });
+  }
+
+  setInterval(()=>{
+    cartUpdate();
+  }, 500);
+
+
+});
+
+</script>
+
+
 
 {% schema %}
 {
-  "name": "Star Rating",
+  "name": "App Settings",
   "target": "section",
   "settings": [
     { "type": "product", "id": "product", "label": "product", "autofill": true },
-    { "type": "color", "id": "colour", "label": "Star Colour", "default": "#ff0000" }
+    { "type": "color", "id": "colour", "label": "Star Colour", "default": "#ff0000" },
+    { "type": "text", "id": "target_container", "label": "Target", "info": "Place your target container class/id in that text box" },
+    { "type": "text", "id": "empty_cart_content", "label": "Empty cart text", "default": "Add items to the cart to get the free shipping" }
   ]
 }
 {% endschema %}
