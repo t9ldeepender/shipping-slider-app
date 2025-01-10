@@ -1,13 +1,7 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
-// Note that some adapters may set a maximum length for the String type by default, please ensure your strings are long
-// enough when changing adapters.
-// See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
 datasource db {
   provider = "sqlite"
   url      = "file:dev.sqlite"
@@ -31,14 +25,11 @@ model Session {
   emailVerified Boolean?  @default(false)
 }
 
-// ? for not required
-
 model Settings {
-  id            String    @id @default(cuid())  // or uuid()
-  heading       String?
-  headingColor  String?
-  amount        Int
-  sliderColor   String?
-  shop          String
+  id           String @id @default(cuid())
+  shop         String
+  heading      String
+  headingColor String
+  amount       Int
+  sliderColor  String
 }
-

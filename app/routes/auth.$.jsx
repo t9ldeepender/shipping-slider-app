@@ -11,7 +11,7 @@ export const loader = async ({ request }) => {
 
   const apiKey = process.env.SHOPIFY_API_KEY;
   const redirectUri = process.env.SHOPIFY_REDIRECT_URI;
-  const scopes = "read_products,write_products"; // Adjust scopes as needed
+  const scopes = "read_products,write_themes";
 
   const installUrl = `https://${shop}.myshopify.com/admin/oauth/authorize?client_id=${apiKey}&scope=${scopes}&redirect_uri=${redirectUri}`;
 

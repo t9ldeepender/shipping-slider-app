@@ -25,7 +25,7 @@ export async function loader({request}) {
       
     }catch(err){console.log(err, "no error found")}
   }
-  return json(settings)
+  return json({settings: settings, shop: session.session.shop})
 }
 
 
@@ -45,13 +45,14 @@ export async function action({ request }){
       amount: parseInt(settings.amount),
       sliderColor: settings.slider_color,
     },
+    // how to create the record in db ⬇
     create: {
       id : settings.id,
       heading: settings.heading,
       headingColor: settings.heading_color,
       amount: parseInt(settings.amount),
       sliderColor: settings.slider_color,
-      shop: Math.random().toString()
+      shop: settings.shop
     },
   })
 
@@ -60,7 +61,7 @@ export async function action({ request }){
 
 export default function AppSettingsLayoutExample() {
 
-  const settings = useLoaderData()
+  const {settings, shop } = useLoaderData()
 
     const [color, setColor] = useState({
       hue: 120,
@@ -201,6 +202,7 @@ export default function AppSettingsLayoutExample() {
                     autoComplete="off"
                     name="heading_color"
                   />
+                  <input type="hidden" name="shop" value={`${shop}`} />
                   </LegacyCard>
                 </Grid.Cell>
               </Grid>

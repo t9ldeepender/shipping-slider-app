@@ -3,7 +3,7 @@
 client_id = "a1b9e8f715d15af647352dacf062b748"
 name = "shipping-delivery"
 handle = "shipping-delivery-2"
-application_url = "https://characterized-herald-sauce-chick.trycloudflare.com"
+application_url = "https://sizes-stroke-alabama-provide.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_cart_transforms,read_orders,read_products,read_themes,write_produ
 
 [auth]
 redirect_urls = [
-  "https://characterized-herald-sauce-chick.trycloudflare.com/auth/callback",
-  "https://characterized-herald-sauce-chick.trycloudflare.com/auth/shopify/callback",
-  "https://characterized-herald-sauce-chick.trycloudflare.com/api/auth/callback"
+  "https://sizes-stroke-alabama-provide.trycloudflare.com/auth/callback",
+  "https://sizes-stroke-alabama-provide.trycloudflare.com/auth/shopify/callback",
+  "https://sizes-stroke-alabama-provide.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
